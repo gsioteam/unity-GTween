@@ -132,21 +132,18 @@ namespace GTween
         public static Tween<T, V> AddTween<T, V>(this T target, V from, V to, double duration, Property<T, V> property)
             => new Tween<T, V>(target, from, to, duration, property);
         public static Tween<T, V> AddTween<T, V>(this T target, V from, V to, double duration, System.Func<V, V, double, V> OnMix, System.Action<T, V> OnSet)
-            => new Tween<T, V>(target, from, to, duration, new DelegateProperty<T, V>
+            => AddTween(target, from, to, duration, new DelegateProperty<T, V>
             {
                 OnMix = OnMix,
                 OnSet = OnSet
             });
 
         public static void StopTweens<T>(this T target)
-        {
-            var tweens = TweenManager.GetManager().Tweens;
-            tweens.RemoveWhere((val) => val.Target.Equals(target));
-        }
+            => TweenManager.GetManager().Tweens.RemoveWhere((val) => val.Target.Equals(target));
 
         /**
          * Default extensions
-         */ 
+         */
         public static Tween<T, float> AddTween<T>(this T target, float from, float to, double duration, System.Action<T, float> OnSet)
             => AddTween(target, from, to, duration, (f, t, p) => f * (float)(1 - p) + t * (float)p, OnSet);
         public static Tween<T, double> AddTween<T>(this T target, double from, double to, double duration, System.Action<T, double> OnSet)
